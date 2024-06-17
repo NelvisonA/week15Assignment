@@ -1,23 +1,50 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+import Nav from './components/Nav';
+import HouseServices from './services/HouseServices';
+import HousesContainer from './components/HousesContainer';
+import AddHouse from './components/AddHouse';
+
+
+let service = new HouseServices();
 
 function App() {
+
+  const [houses, setHouses] = useState([])
+
+  useEffect(() => {
+
+   service.allHouses().then(houses => {
+
+    setHouses(houses);
+
+  })
+}, []);
+
+function handleDelete (house, e) {
+
+  if(house) {
+
+    service.deleteHouse(house)
+
+  }
+
+}
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+      <Nav />
+
+    <br></br>
+
+      <HousesContainer houses={ houses } onDelete={ handleDelete }/>
+
+    <br></br>
+
+    <AddHouse />
+
     </div>
   );
 }
