@@ -33,7 +33,24 @@ export default class HouseServices {
         } catch (error) {
             console.error('error', error)
         }
-    }
+    };
+
+    async addHouse(houseId, roomName) {
+        try {
+            const res =  await fetch(baseUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    room: roomName,
+                    id: houseId
+                })
+             });
+        } catch (error) {
+            console.log('Error')
+        }
+    };
 
 
 }

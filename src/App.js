@@ -10,27 +10,36 @@ let service = new HouseServices();
 
 function App() {
 
-  const [houses, setHouses] = useState([])
+  const [houses, setHouses] = useState([]);
+
+  function reload() {
+
+    service.allHouses().then(houses => {
+      setHouses(houses);
+    });
+  }
 
   useEffect(() => {
-
-   service.allHouses().then(houses => {
-
-    setHouses(houses);
-
-  })
+    reload();
 }, []);
 
 function handleDelete (house, e) {
 
   if(house) {
-
-    service.deleteHouse(house)
-
-  }
-
+    service.deleteHouse(house).then(() => {
+      let remainingHouses = houses.filter((h, index) => h.id !== house);
+      setHouses(remainingHouses);
+    });
+  };
 }
-  
+
+  function handleHouseAdded(house, e) {
+    if(house) {
+      service.addHouse(house.id, house.room).then(() => {
+        reload();
+      });
+    };
+  }
 
   return (
     <div className="App">
@@ -43,7 +52,7 @@ function handleDelete (house, e) {
 
     <br></br>
 
-    <AddHouse />
+    <AddHouse onAdded= { handleHouseAdded }/>
 
     </div>
   );
